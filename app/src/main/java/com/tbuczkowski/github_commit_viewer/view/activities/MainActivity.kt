@@ -1,4 +1,4 @@
-package com.tbuczkowski.github_commit_viewer.view
+package com.tbuczkowski.github_commit_viewer.view.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

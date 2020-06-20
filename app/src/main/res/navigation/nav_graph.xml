@@ -3,11 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/RepositorySearchFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.tbuczkowski.github_commit_viewer.view.RepositorySearchFragment"
+        android:id="@+id/RepositorySearchFragment"
+        android:name="com.tbuczkowski.github_commit_viewer.view.fragments.RepositorySearchFragment"
         android:label="@string/repo_search_page_title"
-        tools:layout="@layout/fragment_first" />
+        tools:layout="@layout/repository_search_fragment" >
+        <action
+            android:id="@+id/action_RepositorySearchFragment_to_CommitListFragment"
+            app:destination="@id/CommitListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/CommitListFragment"
+        android:name="com.tbuczkowski.github_commit_viewer.view.fragments.CommitListFragment"
+        android:label="@string/repo_search_page_title"
+        tools:layout="@layout/repository_search_fragment" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.tbuczkowski.github_commit_viewer.view
+package com.tbuczkowski.github_commit_viewer.view.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
