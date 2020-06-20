@@ -43,18 +43,13 @@ class RepositorySearchFragment : Fragment() {
                 exampleRepos
             )
         listView.adapter = adapter
-        view.findViewById<ListView>(R.id.repoHistoryListView).setOnItemClickListener { parent, view, index, id ->
+        listView.setOnItemClickListener { parent, view, index, id ->
             val repository: GitRepository = adapter.getItem(index) as GitRepository
             navigateToCommitListView(repository)
         }
 
-        return view;
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        view.findViewById<Button>(R.id.repoSearchButton).setOnClickListener {
+        val repoSearchButton: Button = view.findViewById(R.id.repoSearchButton)
+        repoSearchButton.setOnClickListener {
             val nameInputField: EditText = view.findViewById<EditText>(R.id.repoNameInput)
             val repoHandle: String = nameInputField.text.toString()
             // TODO: input validation
@@ -62,7 +57,7 @@ class RepositorySearchFragment : Fragment() {
             navigateToCommitListView(repository)
         }
 
-
+        return view;
     }
 
     // TODO: fetching data from github API
