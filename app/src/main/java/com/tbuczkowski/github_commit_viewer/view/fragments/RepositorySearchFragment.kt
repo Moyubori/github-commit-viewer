@@ -19,10 +19,17 @@ import com.tbuczkowski.github_commit_viewer.view.adapters.GitRepositoryAdapter
  */
 class RepositorySearchFragment : Fragment() {
 
+    val exampleCommits: List<Commit> = listOf(
+        Commit("Merge", "1234567890", "Tymoteusz Buczkowski"),
+        Commit("HelloWorld", "1234567890", "Jan Nowak"),
+        Commit("Test", "1234567890", "Tymoteusz Buczkowski"),
+        Commit("Initial commit", "1234567890", "Tymoteusz Buczkowski")
+    )
+
     val exampleRepos: List<GitRepository> = listOf(
-        GitRepository("moyubori/spaceshooter"),
-        GitRepository("moyubori/mkdg"),
-        GitRepository("moyubori/performancetester")
+        GitRepository("moyubori/spaceshooter", exampleCommits),
+        GitRepository("moyubori/mkdg", exampleCommits),
+        GitRepository("moyubori/performancetester", exampleCommits)
     )
 
     override fun onCreateView(
@@ -49,23 +56,18 @@ class RepositorySearchFragment : Fragment() {
             val nameInputField: EditText = view.findViewById<EditText>(R.id.repoNameInput)
             val repoHandle: String = nameInputField.text.toString()
             // TODO: input validation
-            // TODO: fetching data from github API
             val repository: GitRepository = fetchGitRepository(repoHandle)
             navigateToCommitListView(repository)
         }
     }
 
-    // TODO
+    // TODO: fetching data from github API
     private fun fetchGitRepository(handle: String) : GitRepository {
-        return GitRepository(handle, listOf(
-            Commit("Merge", "1234567890", "Tymoteusz Buczkowski"),
-            Commit("HelloWorld", "1234567890", "Jan Nowak"),
-            Commit("Test", "1234567890", "Tymoteusz Buczkowski"),
-            Commit("Initial commit", "1234567890", "Tymoteusz Buczkowski")
-        ))
+        return GitRepository(handle, exampleCommits)
     }
 
     private fun navigateToCommitListView(repository: GitRepository) {
-            findNavController().navigate(R.id.action_RepositorySearchFragment_to_CommitListFragment)
+        val action = RepositorySearchFragmentDirections.actionRepositorySearchFragmentToCommitListFragment(repository)
+        findNavController().navigate(action)
     }
 }

@@ -15,12 +15,17 @@
             app:destination="@id/CommitListFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popUpTo="@id/RepositorySearchFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/CommitListFragment"
         android:name="com.tbuczkowski.github_commit_viewer.view.fragments.CommitListFragment"
         android:label="@string/repo_search_page_title"
-        tools:layout="@layout/repository_search_fragment" />
+        tools:layout="@layout/repository_search_fragment" >
+        <argument
+            android:name="repository"
+            app:argType="com.tbuczkowski.github_commit_viewer.model.GitRepository" />
+    </fragment>
 </navigation>
