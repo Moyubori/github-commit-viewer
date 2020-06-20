@@ -11,6 +11,7 @@ import android.widget.ListAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.tbuczkowski.github_commit_viewer.R
 import com.tbuczkowski.github_commit_viewer.model.Commit
 import com.tbuczkowski.github_commit_viewer.model.GitRepository
@@ -54,7 +55,11 @@ class CommitListFragment : Fragment() {
                 val shareIntent = Intent.createChooser(sendIntent, null)
                 startActivity(shareIntent)
             } else {
-                // TODO: Snackbar
+                val snackbar: Snackbar = Snackbar.make(view, resources.getText(R.string.no_commits_selected_message), Snackbar.LENGTH_SHORT)
+                snackbar.setAction(resources.getText(R.string.dismiss)) {
+                    snackbar.dismiss()
+                }
+                snackbar.show()
             }
         }
 

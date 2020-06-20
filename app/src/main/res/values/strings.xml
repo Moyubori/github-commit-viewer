@@ -6,4 +6,6 @@
     <string name="commit_list_page_title">Commit List</string>
     <string name="commit_list_repository_id">Repository ID: %1$s</string>
     <string name="send_button">SEND</string>
+    <string name="dismiss">DISMISS</string>
+    <string name="no_commits_selected_message">No commits selected.</string>
 </resources>

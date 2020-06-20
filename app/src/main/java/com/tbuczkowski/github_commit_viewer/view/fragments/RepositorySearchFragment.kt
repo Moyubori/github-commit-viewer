@@ -8,14 +8,19 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.navigation.fragment.findNavController
 import com.tbuczkowski.github_commit_viewer.R
+import com.tbuczkowski.github_commit_viewer.data_providers.GitRepositoryProvider
 import com.tbuczkowski.github_commit_viewer.model.Commit
 import com.tbuczkowski.github_commit_viewer.model.GitRepository
 import com.tbuczkowski.github_commit_viewer.view.adapters.GitRepositoryAdapter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class RepositorySearchFragment : Fragment() {
+
+    private val gitRepositoryProvider: GitRepositoryProvider = GitRepositoryProvider()
 
     val exampleCommits: List<Commit> = listOf(
         Commit("Merge", "1234567890", "Tymoteusz Buczkowski"),
@@ -53,16 +58,15 @@ class RepositorySearchFragment : Fragment() {
             val nameInputField: EditText = view.findViewById<EditText>(R.id.repoNameInput)
             val repoHandle: String = nameInputField.text.toString()
             // TODO: input validation
-            val repository: GitRepository = fetchGitRepository(repoHandle)
-            navigateToCommitListView(repository)
+            gitRepositoryProvider.fetchGitRepository(repoHandle)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                navigateToCommitListView(it)
+            }
         }
 
         return view;
-    }
-
-    // TODO: fetching data from github API
-    private fun fetchGitRepository(handle: String) : GitRepository {
-        return GitRepository(handle, "24680", exampleCommits)
     }
 
     private fun navigateToCommitListView(repository: GitRepository) {
