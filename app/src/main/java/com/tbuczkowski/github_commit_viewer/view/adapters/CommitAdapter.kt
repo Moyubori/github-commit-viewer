@@ -8,8 +8,6 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.tbuczkowski.github_commit_viewer.R
 import com.tbuczkowski.github_commit_viewer.model.Commit
-import com.tbuczkowski.github_commit_viewer.model.GitRepository
-import org.w3c.dom.Text
 
 class CommitAdapter(private val context: Context, private val commits: List<Commit>) : BaseAdapter() {
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -39,6 +37,5 @@ class CommitAdapter(private val context: Context, private val commits: List<Comm
     override fun getCount(): Int {
         return commits.size
     }
-
 
 }

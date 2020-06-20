@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import com.tbuczkowski.github_commit_viewer.R
 import com.tbuczkowski.github_commit_viewer.model.Commit
@@ -27,9 +25,9 @@ class RepositorySearchFragment : Fragment() {
     )
 
     val exampleRepos: List<GitRepository> = listOf(
-        GitRepository("moyubori/spaceshooter", exampleCommits),
-        GitRepository("moyubori/mkdg", exampleCommits),
-        GitRepository("moyubori/performancetester", exampleCommits)
+        GitRepository("moyubori/spaceshooter", "12345", exampleCommits),
+        GitRepository("moyubori/mkdg", "67890", exampleCommits),
+        GitRepository("moyubori/performancetester", "13579", exampleCommits)
     )
 
     override fun onCreateView(
@@ -38,13 +36,17 @@ class RepositorySearchFragment : Fragment() {
     ): View? {
         val view: View = inflater.inflate(R.layout.repository_search_fragment, container, false)
 
-        val listView: ListView = view.findViewById<ListView>(R.id.repoHistoryList)
+        val listView: ListView = view.findViewById<ListView>(R.id.repoHistoryListView)
         val adapter: ListAdapter =
             GitRepositoryAdapter(
                 requireContext(),
                 exampleRepos
             )
         listView.adapter = adapter
+        view.findViewById<ListView>(R.id.repoHistoryListView).setOnItemClickListener { parent, view, index, id ->
+            val repository: GitRepository = adapter.getItem(index) as GitRepository
+            navigateToCommitListView(repository)
+        }
 
         return view;
     }
@@ -59,11 +61,13 @@ class RepositorySearchFragment : Fragment() {
             val repository: GitRepository = fetchGitRepository(repoHandle)
             navigateToCommitListView(repository)
         }
+
+
     }
 
     // TODO: fetching data from github API
     private fun fetchGitRepository(handle: String) : GitRepository {
-        return GitRepository(handle, exampleCommits)
+        return GitRepository(handle, "24680", exampleCommits)
     }
 
     private fun navigateToCommitListView(repository: GitRepository) {

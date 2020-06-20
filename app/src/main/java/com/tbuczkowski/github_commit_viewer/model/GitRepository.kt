@@ -2,4 +2,4 @@ package com.tbuczkowski.github_commit_viewer.model
 
 import java.io.Serializable
 
-data class GitRepository (val handle: String, val commits: List<Commit> = emptyList()) : Serializable
+data class GitRepository (val handle: String, val id: String, val commits: List<Commit> = emptyList()) : Serializable

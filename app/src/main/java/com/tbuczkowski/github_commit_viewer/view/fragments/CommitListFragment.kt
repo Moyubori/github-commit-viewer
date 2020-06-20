@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListAdapter
 import android.widget.ListView
+import android.widget.TextView
 import androidx.navigation.fragment.navArgs
 import com.tbuczkowski.github_commit_viewer.R
 import com.tbuczkowski.github_commit_viewer.model.Commit
@@ -29,6 +30,10 @@ class CommitListFragment : Fragment() {
         val listView: ListView = view.findViewById<ListView>(R.id.commitsListView)
         val adapter: ListAdapter = CommitAdapter(requireContext(), commits)
         listView.adapter = adapter
+
+        val repositoryIdTextView: TextView = view.findViewById<TextView>(R.id.repositoryIdText)
+        val formattedRepositoryIdText: String = String.format(resources.getString(R.string.commit_list_repository_id), repository.id)
+        repositoryIdTextView.text = formattedRepositoryIdText
 
         return view
     }
