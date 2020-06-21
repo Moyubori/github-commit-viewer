@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ListAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.tbuczkowski.github_commit_viewer.R
 import com.tbuczkowski.github_commit_viewer.Utils
 import com.tbuczkowski.github_commit_viewer.model.Commit
@@ -22,7 +20,7 @@ class CommitListFragment : Fragment() {
 
     private val args: CommitListFragmentArgs by navArgs()
 
-    private var selectedCommit: Commit? = null
+//    private var selectedCommit: Commit? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,19 +36,18 @@ class CommitListFragment : Fragment() {
         repositoryIdTextView.text = formattedRepositoryIdText
 
         val listView: ListView = view.findViewById<ListView>(R.id.commitsListView)
-        val adapter: ListAdapter = CommitAdapter(requireContext(), commits)
+        val adapter: CommitAdapter = CommitAdapter(requireContext(), commits)
         listView.adapter = adapter
-        listView.setOnItemClickListener { parent, view, index, id ->
-            selectedCommit = adapter.getItem(index) as Commit
-            view.isSelected = true
-        }
 
         val sendButton: Button = view.findViewById<Button>(R.id.sendButton)
         sendButton.setOnClickListener {
-            if (selectedCommit != null) {
+            val selectedCommits: List<Commit> = adapter.getAndClearCheckedCommits()
+            if (selectedCommits.isNotEmpty()) {
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, selectedCommit.toString())
+                    putExtra(Intent.EXTRA_TEXT, selectedCommits.joinToString {
+                        it.toString()
+                    })
                     type = "text/plain"
                 }
                 val shareIntent = Intent.createChooser(sendIntent, null)

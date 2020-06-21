@@ -7,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.tbuczkowski.github_commit_viewer.R
 import com.tbuczkowski.github_commit_viewer.Utils
 import com.tbuczkowski.github_commit_viewer.data_providers.GitRepositoryProvider
-import com.tbuczkowski.github_commit_viewer.model.Commit
 import com.tbuczkowski.github_commit_viewer.model.GitRepository
 import com.tbuczkowski.github_commit_viewer.view.adapters.GitRepositoryAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
