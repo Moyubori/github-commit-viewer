@@ -9,4 +9,5 @@
     <string name="dismiss">DISMISS</string>
     <string name="no_commits_selected_message">No commits selected.</string>
     <string name="error_fetching_repo">Error fetching repository. Code: %1$d</string>
+    <string name="invalid_repository_handle">Invalid repository handle.</string>
 </resources>

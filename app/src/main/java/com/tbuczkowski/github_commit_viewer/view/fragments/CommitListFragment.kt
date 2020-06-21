@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.tbuczkowski.github_commit_viewer.R
+import com.tbuczkowski.github_commit_viewer.Utils
 import com.tbuczkowski.github_commit_viewer.model.Commit
 import com.tbuczkowski.github_commit_viewer.model.GitRepository
 import com.tbuczkowski.github_commit_viewer.view.adapters.CommitAdapter
@@ -55,11 +56,7 @@ class CommitListFragment : Fragment() {
                 val shareIntent = Intent.createChooser(sendIntent, null)
                 startActivity(shareIntent)
             } else {
-                val snackbar: Snackbar = Snackbar.make(view, resources.getText(R.string.no_commits_selected_message), Snackbar.LENGTH_SHORT)
-                snackbar.setAction(resources.getText(R.string.dismiss)) {
-                    snackbar.dismiss()
-                }
-                snackbar.show()
+                Utils.showDismissibleSnackbar(resources.getText(R.string.no_commits_selected_message).toString(), view, resources)
             }
         }
 
