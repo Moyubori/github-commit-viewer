@@ -8,10 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListAdapter
-import android.widget.ListView
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tbuczkowski.github_commit_viewer.R
 import com.tbuczkowski.github_commit_viewer.Utils
 import com.tbuczkowski.github_commit_viewer.model.Commit
@@ -37,13 +41,29 @@ class CommitListFragment : Fragment() {
         val formattedRepositoryIdText: String = String.format(resources.getString(R.string.commit_list_repository_id), repository.id)
         repositoryIdTextView.text = formattedRepositoryIdText
 
-        val listView: ListView = view.findViewById<ListView>(R.id.commitsListView)
-        val adapter: ListAdapter = CommitAdapter(requireContext(), commits)
-        listView.adapter = adapter
-        listView.setOnItemClickListener { parent, view, index, id ->
-            selectedCommit = adapter.getItem(index) as Commit
-            view.isSelected = true
-        }
+        val recyclerView: RecyclerView = view.findViewById<RecyclerView>(R.id.commitsRecyclerView)
+        val adapter: CommitAdapter = CommitAdapter(requireContext(), commits)
+        recyclerView.adapter = adapter
+        val tracker = SelectionTracker.Builder<Long>(
+            "commitListViewSelection",
+            recyclerView,
+            StableIdKeyProvider(recyclerView),
+            CommitAdapter.CommitItemDetailsLookup(recyclerView),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
+        adapter.tracker = tracker
+
+        // TODO: selection doesn't seem to be working fine
+        // TODO: passing data from multiple selected items to share intent
+
+//        recyclerView.adapter = adapter
+//        recyclerView.setOnItemClickListener { parent, view, index, id ->
+//            selectedCommit = adapter.getItem(index) as Commit
+//            view.isSelected = true
+//        }
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val sendButton: Button = view.findViewById<Button>(R.id.sendButton)
         sendButton.setOnClickListener {
