@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.tbuczkowski.github_commit_viewer.R
 import com.tbuczkowski.github_commit_viewer.data_providers.GitRepositoryProvider
 import com.tbuczkowski.github_commit_viewer.model.Commit
@@ -14,38 +15,25 @@ import com.tbuczkowski.github_commit_viewer.model.GitRepository
 import com.tbuczkowski.github_commit_viewer.view.adapters.GitRepositoryAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class RepositorySearchFragment : Fragment() {
 
-    private val gitRepositoryProvider: GitRepositoryProvider = GitRepositoryProvider()
-
-    val exampleCommits: List<Commit> = listOf(
-        Commit("Merge", "1234567890", "Tymoteusz Buczkowski"),
-        Commit("HelloWorld", "1234567890", "Jan Nowak"),
-        Commit("Test", "1234567890", "Tymoteusz Buczkowski"),
-        Commit("Initial commit", "1234567890", "Tymoteusz Buczkowski")
-    )
-
-    val exampleRepos: List<GitRepository> = listOf(
-        GitRepository("moyubori/spaceshooter", "12345", exampleCommits),
-        GitRepository("moyubori/mkdg", "67890", exampleCommits),
-        GitRepository("moyubori/performancetester", "13579", exampleCommits)
-    )
+    private lateinit var gitRepositoryProvider: GitRepositoryProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        gitRepositoryProvider =  GitRepositoryProvider.getInstance(requireContext())
+
         val view: View = inflater.inflate(R.layout.repository_search_fragment, container, false)
 
         val listView: ListView = view.findViewById<ListView>(R.id.repoHistoryListView)
         val adapter: ListAdapter =
             GitRepositoryAdapter(
                 requireContext(),
-                exampleRepos
+                gitRepositoryProvider.getCachedRepositories()
             )
         listView.adapter = adapter
         listView.setOnItemClickListener { parent, view, index, id ->
@@ -58,12 +46,20 @@ class RepositorySearchFragment : Fragment() {
             val nameInputField: EditText = view.findViewById<EditText>(R.id.repoNameInput)
             val repoHandle: String = nameInputField.text.toString()
             // TODO: input validation
-            gitRepositoryProvider.fetchGitRepository(repoHandle)
+            gitRepositoryProvider.fetchRepository(repoHandle)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe({
                 navigateToCommitListView(it)
-            }
+            },  {
+                    val exception: HttpException = it as HttpException
+                    val errorMessage: String = String.format(resources.getText(R.string.error_fetching_repo).toString(), exception.code())
+                    val snackbar: Snackbar = Snackbar.make(view, errorMessage, Snackbar.LENGTH_SHORT)
+                    snackbar.setAction(resources.getText(R.string.dismiss)) {
+                        snackbar.dismiss()
+                    }
+                    snackbar.show()
+                })
         }
 
         return view;
